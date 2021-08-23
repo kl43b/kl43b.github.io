@@ -1,22 +1,329 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title></title>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>Relocating locator with graph frozen in-place</title>
+
+  	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script-->
+
+    <!-- jquery -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/ui-darkness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- MathJax -->
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="">
+    <!-- tindent addresses a weird second-table indent bug -->
     <style>
-				
+    	html {background-color: black;}
+    	.pindent {margin-left: 25px;}
+    	.tindent {margin-left: 35px;}
+    	.tdPT {color:#0000ff;}
+
+    	.breaker {
+    		float: left;
+    		clear: both;
+    		width: 100vw;
+    	}
+
+    	.fourths {
+    		float: left;
+    	  width: 25vw; 
+    	  border-style:  none;
+    	}
+    	.thirds {
+    		float: left;
+    	  width: 33vw; 
+    	  border-style:  none;
+    	}
+    	.halves {
+    		float: left;
+    	  width: 50vw; 
+    	  border-style:  none;
+    	}
+    	.nineties {
+    		float:  left;
+    		clear:  left;
+    		width: 90vw;
+    		border-style: none;
+    	}
+    	.fullsies {
+    		float: left;
+    		clear: left;
+    	  width: 100vw; 
+    	  border-style:  none;
+    	}
+
+
     </style>
   </head>
   <body>
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
-    <a href-"https://kl43b.github.io/">Back to repository README</a><hr />
-
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script-->
 
     <script>
+      //<canvas width=300 height=300 id="cvs"></canvas>
+
+      // $( function() {
       $(document).ready(function() {
-         alert("loaded test");
-      });
+        $("#accordion")
+          .accordion({ 
+          	active: 1, 
+          	heightStyle: "content", 
+          	collapsible: true,
+          	//onItemTitleClick: function() {},  // TODO: reopen main if intro is closed
+          }).accordion();
+
+			});
     </script>
+
+		<div id="accordion">
+		  <h3>Translation and Initial Insights</h3>
+		  <div>
+		    <p>
+		    	In this section, because the primary purpose of this article is to show a <em>new</em> method, I'm simply including how translation is currently used to solve problems. It is assumed that you are already familiar with translating functions horizontally and vertically (by convention: (x-h) and k).
+          
+          <h2>Root finding</h2>
+          <p class="pindent">
+						Root-finding equations solve a general case having a special point at the origin (\(\frac{-b}{2a}\) for quadratics, and \(\frac{-b}{3a}\) for cubics), and then translate (shift) the answers over to your position. That's what's happening in the quadratic equation: \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\] The first part: (\(\frac{-b}{2a}\)) is the automatic shift for <em>your</em> equation, while the second part: \(\frac{\sqrt{b^{2}-4ac}}{2a}\) is the general solution about (0,0).
+          </p><p class="pindent">
+						Translation can make this simpler by zeroing the second term. For example:
+
+						<table cols=2><tr>
+							<td>
+								<ul style="list-style-type: none;">
+						  		<li>\(x^{2}-3x+2\)</li>
+						  		<li>\(\left(x\ -\ \frac{3}{2}\right)^{2}-3\left(x-\frac{3}{2}\right)+2\)</li>
+						  		<li>\(x^{2}-\frac{1}{4}\)</li>
+								</ul>
+							</td><td>
+						  	<ul>
+						  		<li>Unshifted original (a=1, b=-3, c=2)</li>
+						  		<li>Shift so the vertex \(\frac{-b}{2a}\) is over the origin</li>
+						  		<li>After expanding and recombining terms.</li>
+						  	</ul>
+							</td>
+						</tr></table>
+
+						<p class="pindent">
+							The vertex is centered on the origin and solved more simply -- because \(b=0\) -- but this means the quadratic equation can't shift the answer back; you have to remember this step.
+						</p>
+          </p>
+
+          <h2>Depressing polynomials and factoring</h2>
+	        <p class="pindent">
+
+						By "depression" I mean "forcing a term to zero" while having an equivalent polynomial (this often makes some tricks work better). The next part’s example shows an equivalent polynomial having a zero second term.
+					</p>
+
+					<h2>Completing Squares</h2>
+					<p class="pindent">
+						Completing the square produces an equivalent quadratic in the same place (no translation). The quadratic equation then solves and translates it in-place for you.
+
+						<table cols=2 class=tindent>
+							<tr><td>\(x^{2}-3x+2\)</td><td>&nbsp;&bull;&nbsp;&nbsp;Original</td></tr>
+						  <tr><td>\(x^{2}-\frac{1}{4}\)</td><td>&nbsp;&bull;&nbsp;&nbsp;Shifted, from above <em>(must undo shift)</em></td></tr>
+							<tr><td>\(\left(x-\frac{3}{2}\right)^{2}-\frac{1}{4}\)</td><td>&nbsp;&bull;&nbsp;&nbsp;Squares-completed <em>(expand and solve quadratically)</em></td></tr>
+						</table>
+					</p> <!-- that table breaks paragraph's indent; don't know why / restart below -->
+					<p class="pindent">
+						Notice the similarity in the last two forms. The former undergoes temporary translation, while the latter hasn't moved <em>from its original position</em>. <u>The graph staying in the same location</u> turns out to be an important intuition.
+
+					</p>
+					<h2>Ready for the main show?</h2>
+					<p>
+						Tap on [Main Content] below to expand that tab.
+					</p>
+		    </p>
+		  </div> <!-- initial insights block -->
+
+		  <h3>Main Content</h3>
+		  <div>
+		    <p>
+		    	<a href="https://kl43b.github.io/">Back to repository</a> <br />
+		    	<em>(A refresher on translation as it's currently used is in the collapsed section above)</em>
+		    	<hr />
+		    	<h2>Purpose</h2>
+          <p class="pindent">
+          	A new way to <strong>translate graphs in-place using Pascal's Triangle</strong> is shown. This reveals surprising new intuitions about the locator and casts new light on some long-held assumptions. For example, the circle's locator does not have to remain in the center...and the constant is not its radius\(^2\).
+          	<br /><br /><img src="img/circle_locator.gif" width=260px>
+          </p>
+
+          <h2>What's The Locator?</h2>
+		    	<p class="pindent">
+		    		A polynomial’s locator is (for many) "the handle by which we drag functions around" and it represents the graph's translation. In this equation:
+<br />
+						\(\left(x-h\right)^{2}+\left(x-h\right)+k\)<br />
+					</p><p>
+						The graph drags around with -- and always goes through -- the point \((h,k)\) at \(x=0\). We could therefore call this the graph's "origin", around which the output is drawn.
+
+						A problem with that intuition is that during term updates the locator's behavior and any deeper meanings get lost in translation. Further, the standard locator for a circle isn't on the graph at all (it just sits in the center), so the locator really <em>does</em> just look like a dragging handle.
+		    	</p>
+
+		    	<h2>Move The Locator / Not The Graph</h2>
+		    	<p class="pindent">
+		    		In the optional intro I noted that a "completed squares" graph stays in exactly the same place as the original. It means that <strong>only the locator has moved</strong> on a graph. In a picture, it looks something like this: <br />
+		    		<br />
+		    		<img src="img/LocusLocatorsQuadratic.png">
+		    		<br />
+		    		<em>Equivalent outputs, different locators.</em>
+		    	</p>
+
+          <p class="pindent">
+          	Moving the locator but keeping the graph still means the coefficients have to change. Above, they changed from \([3, 1, -1]\)  to \([3, 4, 1/4]\). At first this doesn't seem very significant, but after a lot of samples you might find that there's a pattern to these changes.
+          </p>
+
+          <h2>Locator: Relocation</h2>
+          <p class="pindent">
+						<div class="fullsies">
+							<p class="pindent">
+								These changes come from Pascal's Triangle. We start by pulling out its diagonals through the quadratic row: \(({\color{red}1} / {\color{green}2\;1} / {\color{blue}1\;1\;1})\)  <!-- TODO: <em>Note, diagonal direction might matter for scaled triangles (like an x+2 triangle); I'll fix/discuss this in an update.</em> -->
+						  </p>
+						</div>
+					  <div class="halves"><img src="img/quadratic_diagonals.png" width=125px></div>
+					  <div class="breaker" width=100vw>&nbsp;</div>
+					  <div class="halves">
+          	  <p class="pindent">
+          	  	Then given the quadratic: \(a_{1}x^{2}+b_{1}x+c_{1}\) and a desired locator position at \(h\):
+          	  </p>
+            </div>
+            <div class="breaker" width=100vw>&nbsp;</div>
+          	<div class="fourths">
+	          	<table>
+	          		<tr> <td>\(a_{2}\) = </td> <td>\({\color{red}1}\ \cdot\ a_{1}\)</td> </tr>
+	          		<tr> <td>\(b_{2}\) = </td> <td>\({\color{green}2}\ \cdot\ a_{1}h\)</td> <td>+</td> <td>\({\color{green}1}\cdot b_{1}\)</td> </tr>
+	          		<tr> <td>\(c_{2}\) = </td> <td>\({\color{blue}1}\ \cdot\ a_{1}h^{2}\)</td> <td>+</td> <td>\({\color{blue}1}\cdot b_{1}h\)</td> <td>+</td> <td>\({\color{blue}1}\cdot c_{1}\)</td> </tr>
+							</table>            
+					  </div>
+
+						<div class="halves">
+							<p class="pindent">
+								And the graph of \(a_{2}\left(x-h\right)^{2}+b_{2}\left(x-h\right)+c_{2}\)
+								<br />
+								is <u>equivalent</u>, with the locator moved to \((h, c_{2})\)
+							</p>							
+						</div>
+					  <div class="breaker"><hr /></div>
+					</p>
+					
+					<p class="pindent">
+          	<div class="thirds">
+	          	<table>
+	          		<tr> 
+	          			<td>\(a_{2}\) = </td> 
+	          			<td>\({\color{red}1}\ \cdot\ a_{1}\)</td>
+	          		</tr>
+	          		<tr> 
+	          			<td>\(b_{2}\) = </td> 
+	          			<td>\({\color{orange}3}\ \cdot\ a_{1}h\)</td> 
+	          			<td>+</td> 
+	          			<td>\({\color{orange}1}\cdot b_{1}\)</td> 
+	          		</tr>
+	          		<tr> 
+	          			<td>\(c_{2}\) = </td> 
+	          			<td>\({\color{green}3}\ \cdot\ a_{1}h^{2}\)</td> 
+	          			<td>+</td> 
+	          			<td>\({\color{green}2}\cdot b_{1}h\)</td> 
+	          			<td>+</td> 
+	          			<td>\({\color{green}1}\cdot c_{1}\)</td> 
+	          		</tr>
+	          		<tr> 
+	          			<td>\(d_{2}\) = </td> 
+	          			<td>\({\color{blue}1}\ \cdot\ a_{1}h^{3}\)</td> 
+	          			<td>+</td> 
+	          			<td>\({\color{blue}1}\cdot b_{1}h^{2}\)</td> 
+	          			<td>+</td> 
+	          			<td>\({\color{blue}1}\cdot c_{1}h\)</td>
+	          			<td>+</td> 
+	          			<td>\({\color{blue}1}\cdot d_{1}\)</td>
+	          		</tr>
+							</table>            
+					  </div>
+					  <div class="halves">
+							This is a cubic locator move, taking diagonals \(({\color{red}1} / {\color{orange}3\;1} / {\color{green}3\;2\;1} / {\color{blue}1\;1\;1\;1})\).
+					  </div>
+					  <div class="breaker" width=100%>&nbsp;</div>
+					  <div class="halves"><img src="img/cubic_diagonals.png" width=150px></div>
+					  
+					</p>
+
+					<div class="nineties">
+				  <h2>Where To From Here?</h2>
+				  <hr />
+				  <p class="pindent">
+				  	If I were to give you a ready-made <a href="desmos/sample_1.html">Desmos basic locator move sample (link)</a>, you'd have an opportunity to see that quite a lot changes about graphs once you can explore them from the locator's perspective...especially compared to translations, completing squares, root solving, and so on. 
+				  </p>
+				  <p class="pindent">
+				  	I will be adding more content (and, in better formats) soon, but to give you a couple ideas right now, here are a couple of observations I've made:
+				  	<ol>
+				  	  <li>When the locator is over special points, coefficients are depressed (i.e., become zero).
+				  	  	<br /><br />
+				  	  		Here's the pattern for a cubic equation:<br />
+				  	  		<table border=1>
+				  	  			<tr><td>if h is on the...</td><td>Zero'd coeff</td><td>relationship</td></tr>
+				  	  			<tr><td>inflection point</td><td>b</td><td>linear root</td></tr>
+				  	  			<tr><td>extrema</td><td>c</td><td>quadratic roots</td></tr>
+				  	  			<tr><td>root</td><td>d</td><td>cubic roots</td></tr>
+				  	  		</table>
+				  	  		<br />
+				  	  </li>
+				  	  <li>At the moved locator, discarding left-hand terms one-by-one produces tangents in this manner:
+				  	  	<table border=1>
+				  	  		<tr><td align="right">\(a\left(x-h\right)^{3}+b\left(x-h\right)^{2}+c\left(x-h\right)+d\)</td><td>Original</td></tr>
+				  	  		<tr><td align="right">\(b\left(x-h\right)^{2}+c\left(x-h\right)+d\)</td><td>Tangent conic <a href="https://www.youtube.com/watch?v=SfnsfVsFiFI">(ref: NJ Wildberger) (YouTube)</a></td></tr>
+				  	  		<tr><td align="right">\(c\left(x-h\right)+d\)</td><td>Tangent Line</td></tr>
+				  	  		<tr><td align="right">\(d\)</td><td>Tangent...point?</td></tr>
+				  	  	</table>
+				  	  </li>
+				  	</ol> 
+
+				  	 <!--div class="breaker" width=100%>&nbsp;</div-->
+
+				  </p>
+				</div>
+
+				<div class="nineties">
+					<h2>Next Up</h2>
+					<p class="pindent">
+						Research that's coming:
+						<ul>
+							<li>Multivariable locators, leaving the locus, and the direction of time (<a href="img/ddx_tetrahedron_breakout.png">Sample image 1</a> -- <a href="img/ddx_tetrahedron_xyz1.png">Sample 2</a>)</li>
+							<li>Complex-space locators / analyses</li>
+							<li>Polar equation relocation</li>
+							<li>Rotating the locator point (axes rotation without changing graph)</li>
+							<li>Compatibility with exponents, divisors, normal distribution, etc.</li>
+							<li>Insights into ellipse's focal points</li>
+							<li>More images and demos (some done, some to do)</li>
+							<li>The derivative / integration pattern that explains this discovery <a href="img/deriv_sample.png">Sample here</a></li>
+							<li>A change to how we build Pascal's Triangle <a href="img/pT_5x-2b.png">Sample</a></li>
+							<li>Updated root-solving equations.</li>
+							<li>Updates to calculus</li>
+							<li>...and some more.</li>
+            </ul>
+
+					</p>
+				</div>
+
+				<div class="nineties">
+					<p class="pindent">
+						<!-- text flow is broken now; rather than worry about it, I'll just use divs from now on -->
+						<div class="nineties">
+							<hr /><hr />
+						        	  <sup>2</sup>&nbsp;For those of you who looked for a footnote instead of thinking "radius squared": In \(x^2 + y^2 = c\) ... \({\color{orange}The\;constant\;is\;the\;height}\) (or, distance) from the locator to the surface of the circular paraboloid above/below any given ellipse/circle \({\color{orange}in\;z}\). This height is negative inside the circle, zero on the circle's perimeter, and positive outside. When the locator is moved, the constant changes, <u>making its association with the circle's radius a coincidence</u>.
+						        	  <p>It will take a little time before I can document how multidimensional locator moves work, but if you want to look ahead of time (and...why not seek new puzzles?) you can load the Desmos file for the first circle gif <a href="desmos/sample_2.html">here (link)</a>.</p>
+						        	  <p>Note, I've updated my methods since that demo was written; 3D updates and more will come.
+						</div>
+
+					</p>
+				</div>
+        </p> <!-- accordion panel -->
+		  </div> <!-- "main content" block -->
+    </div> <!-- accordion -->
+
   </body>
 </html>

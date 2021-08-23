@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>  
+    <title>* DESMOS</title>
+    <!--script>alert("~10s : library loading.\n\nGrid/polar at top right, keyboard + functions at bottom left.\n\nSupports BASE64 screenshots, etc.");</script-->
+
+    <!-- demo API key -->
+    <script id="mainAPI" src="https://www.desmos.com/api/v1.5/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script> 
+	
+	<script>
+	  var loaded = false;
+	  var local = false;
+	  // https://stackoverflow.com/questions/21294/dynamically-load-a-javascript-file
+	  //function isScriptLoaded(src){ return document.getElementById("mainAPI").src==src ? true:false;}
+      // querySelector('script[src="' + src + '"]') ? true : false;}
+	  function loadScript(url, callback) {
+	    var head = document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+        script.onreadystatechange = callback;
+        script.onload = callback;
+        head.appendChild(script);
+      }
+	  if(typeof Desmos == 'undefined') {
+        loadScript('calculator_15.js', localAPI);
+	  } else loaded = true;
+	  /*if(isScriptLoaded("https://www.desmos.com/api/v1.3/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6")===false){
+      } else loaded = true;*/
+	  
+	  function localAPI(){
+	    local=true;
+	    loaded=true;
+	  }
+	  
+	</script>
+	
+	<link rel="stylesheet" href="style.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <!-- docs https://www.desmos.com/api/v1.3/docs/index.html -->    
+    <div id="calculator"></div> 
+    <div id="left">
+      <button onclick="getState()">^Dump&ndash;&gt;</button>
+	  <button onclick="setState()">Load &ndash;&gt;^</button><br />
+	  <button onclick="clearCalc()">Clear ^</button>
+	  <button onclick="clearDebug()">Clear &ndash;&gt;</button><br />
+      <button onclick="ss()">^ScrSht&ndash;&gt;</button>&nbsp;&nbsp;&nbsp;&nbsp;
+	  <a href="https://www.desmos.com/api/v1.5/docs/index.html" target="_blank">docs</a><br />
+    </div>
+    <div id="right">
+      <textarea rows=3 cols=40 id="debug"></textarea>  
+	  <textarea rows=1 cols=1 id="rescue" hidden></textarea>
+    </div>
+<!-- Place JSON dumps ONLY inside the script tag (no code, comments, etc) -->
+<script type="text/plain" id="preload">
+{"version":7,"graph":{"viewport":{"xmin":-6.533054311829105,"ymin":-8.477210335868254,"xmax":10.14107554772719,"ymax":5.578127449343522}},"randomSeed":"03b289f8da6594d36d183e927b4910af","expressions":{"list":[{"type":"folder","id":"24","title":"meta (just info)","hidden":true},{"type":"text","id":"32","folderId":"24","text":"Description: Demo for single-variable locator move (on-locus only). Off-locus and multivariable locators moves will come shortly."},{"type":"text","id":"28","folderId":"24","text":"Author: Kirk Schafer on 2021-08-22 for 3b1b submission."},{"type":"text","id":"70","folderId":"24","text":"Github repository hosting this file: https://kl43b.github.io/"},{"type":"text","id":"96","folderId":"24","text":"You should be online when trying this sample, so it can load the Desmos library. If you want to use it offline, you need to grab a copy of the library and save it locally (look at the source code)."},{"type":"text","id":"26","folderId":"24","text":"uuid: 74f3c933-8423-4de5-b0a8-5bfd79071573"},{"type":"text","id":"59","text":"Folder \"coe_1\" is preloaded with coefficients for a quadratic. If you change the degree, try also changing coe_1's terms below."},{"type":"expression","id":"21","color":"#c74440","latex":"d_{eg}=2","slider":{"hardMin":true,"hardMax":true,"min":"1","max":"5","step":"1"}},{"type":"text","id":"61","text":"Move the locator having graph stay in-place, using h_2. Examine the coefficient results in the coe_2 folder and think about why they go to zero (see link in meta section for more)."},{"type":"expression","id":"34","color":"#388c46","latex":"h_{2}=1"},{"type":"text","id":"94","text":"Move h1 to drag / translate everything like usual. Notice how changes to h1 move the graph *regardless* of h2's locator."},{"type":"expression","id":"35","color":"#6042a6","latex":"h_{1}=0"},{"type":"folder","id":"33","title":"loc: Some notes inside.","collapsed":true},{"type":"text","id":"41","folderId":"33","text":"Since the locator is the \"source\" or \"origin\" of a graph, passing in 0 *for a given arrangement of coefficients* starts at the locator for that arrangement."},{"type":"expression","id":"39","folderId":"33","color":"#2d70b3","latex":"\\left(h_{1},f\\left(0,c_{oe1},d_{eg}\\right)\\right)","showLabel":true},{"type":"expression","id":"42","folderId":"33","color":"#6042a6","latex":"\\left(h_{2},f\\left(0,c_{oe2},d_{eg}\\right)\\right)","showLabel":true},{"type":"text","id":"45","folderId":"33","text":"I want an easy way to specify \"x less locator\" in function calls."},{"type":"expression","id":"46","folderId":"33","color":"#2d70b3","latex":"x_{h1}=x-h_{1}","hidden":true},{"type":"expression","id":"47","folderId":"33","color":"#388c46","latex":"x_{h2}=x-h_{2}","hidden":true},{"type":"folder","id":"49","title":"coe 1 : change these to try other polynomial shapes.","hidden":true},{"type":"expression","id":"50","folderId":"49","color":"#000000","latex":"c_{oe1}=\\left[a_{1},b_{1},c_{1},d_{1},e_{1},f_{1}\\right]"},{"type":"expression","id":"51","folderId":"49","color":"#c74440","latex":"a_{1}=1","hidden":true},{"type":"expression","id":"52","folderId":"49","color":"#2d70b3","latex":"b_{1}=1","hidden":true},{"type":"expression","id":"53","folderId":"49","color":"#388c46","latex":"c_{1}=1","hidden":true},{"type":"expression","id":"54","folderId":"49","color":"#6042a6","latex":"d_{1}=0","hidden":true},{"type":"expression","id":"55","folderId":"49","color":"#000000","latex":"e_{1}=0","hidden":true},{"type":"expression","id":"56","folderId":"49","color":"#c74440","latex":"f_{1}=0","hidden":true},{"type":"folder","id":"76","title":"coe 2 : Look, don't touch.","hidden":true,"collapsed":true},{"type":"text","id":"78","folderId":"76","text":"Don't change this; just look at how it changes when you update h_2. Undefined variables occur when \"d_eg\" is too low to fill them all (it's not a problem; just increase the degree of your polynomial)."},{"type":"expression","id":"79","folderId":"76","color":"#000000","latex":"c_{oe2}=f_{coe}\\left(c_{oe1},d_{eg},h_{1},h_{2}\\right)"},{"type":"expression","id":"80","folderId":"76","color":"#c74440","latex":"a_{2}=c_{oe2}\\left[1\\right]"},{"type":"expression","id":"81","folderId":"76","color":"#2d70b3","latex":"b_{2}=c_{oe2}\\left[2\\right]"},{"type":"expression","id":"82","folderId":"76","color":"#388c46","latex":"c_{2}=c_{oe2}\\left[3\\right]"},{"type":"expression","id":"83","folderId":"76","color":"#6042a6","latex":"d_{2}=c_{oe2}\\left[4\\right]"},{"type":"expression","id":"84","folderId":"76","color":"#000000","latex":"e_{2}=c_{oe2}\\left[5\\right]"},{"type":"expression","id":"85","folderId":"76","color":"#c74440","latex":"f_{2}=c_{oe2}\\left[6\\right]"},{"type":"folder","id":"62","title":"functions : The algorithm","hidden":true,"collapsed":true},{"type":"text","id":"64","folderId":"62","text":"The binomial \"choose\" function. In my works, I use T to mean (Pascal's) Triangle. It generates each element of the same."},{"type":"expression","id":"65","folderId":"62","color":"#c74440","latex":"T\\left(n,r\\right)=\\frac{n!}{r!\\left(n-r\\right)!}"},{"type":"text","id":"68","folderId":"62","text":"This...looks crazy because of Desmos syntax. I'll work on documenting this in a math-document-friendly fashion. Also...it does something extra that I haven't explained yet (it allows for initial drag from h_1 before h_2). Basically, it just sticks Pascal's Triangle terms onto the coefficients and sums them together...as described near the end of the paper associated with this demo."},{"type":"expression","id":"66","folderId":"62","color":"#2d70b3","latex":"f_{coe}\\left(c_{oe},d_{g},h_{old},h_{new}\\right)=\\sum_{n=0}^{\\left[0,...d_{g}\\right]}T\\left(d_{g}-n,\\left[0,...d_{g}\\right]-n\\right)c_{oe}\\left[n+1\\right]\\left(h_{new}-h_{old}\\right)^{\\left(\\left[0,...d_{g}\\right]-n\\right)}"},{"type":"text","id":"73","folderId":"62","text":"Plots the function given coefficients and a x with optional translation. Challenge: what happens if you send in x without a translation (so instead of f(x-h2, coe2, deg) you still use coe2, but send f(x, coe2, deg)?"},{"type":"expression","id":"74","folderId":"62","color":"#2d70b3","latex":"f\\left(x,c_{oe},d_{g}\\right)=\\sum_{n=0}^{d_{g}-1}c_{oe}\\left[n+1\\right]x^{\\left(d_{g}-n\\right)}+c_{oe}\\left[d_{g}+1\\right]"},{"type":"folder","id":"87","title":"calls : The output"},{"type":"expression","id":"88","folderId":"87","color":"#2d70b3","latex":"f\\left(x_{h1},c_{oe1},d_{eg}\\right)"},{"type":"expression","id":"89","folderId":"87","color":"#6042a6","latex":"f\\left(x_{h2},c_{oe2},d_{eg}\\right)","lineStyle":"DOTTED"},{"type":"text","id":"91","folderId":"87","text":"This is what happens if you apply the updated coefficients but don't specify the translation that was used, in x. "},{"type":"expression","id":"92","folderId":"87","color":"#c74440","latex":"f\\left(x,c_{oe2},d_{eg}\\right)","hidden":true}]}}
+</script>
+
+  </body>
+</html>

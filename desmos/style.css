@@ -1,0 +1,7 @@
+#calculator {
+  width: 100vw;
+  height: 85vh;
+}
+#left, #right {
+    float:left;
+}
