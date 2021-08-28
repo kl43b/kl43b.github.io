@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>The General Quadratic</title>
+
+  	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script-->
+
+    <!-- jquery -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/ui-darkness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- MathJax -->
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="">
+    <!-- tindent addresses a weird second-table indent bug -->
+    <style>
+      #accordion {width: 50vw;}
+
+    	html {background-color: black;}
+    	.pindent {margin-left: 25px;}
+    	.tindent {margin-left: 35px;}
+    	.tdPT {color:#0000ff;}
+
+    	.breaker {
+    		float: left;
+    		clear: both;
+    		width: 100vw;
+    	}
+
+    	.fourths {
+    		float: left;
+    	  width: 25vw; 
+    	  border-style:  none;
+    	}
+    	.thirds {
+    		float: left;
+    	  width: 33vw; 
+    	  border-style:  none;
+    	}
+    	.halves {
+    		float: left;
+    	  width: 50vw; 
+    	  border-style:  none;
+    	}
+    	.nineties {
+    		float:  left;
+    		clear:  left;
+    		width: 90vw;
+    		border-style: none;
+    	}
+    	.fullsies {
+    		float: left;
+    		clear: left;
+    	  width: 100vw; 
+    	  border-style:  none;
+    	}
+
+
+
+    </style>
+  </head>
+  <body>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script-->
+
+    <script>
+      //<canvas width=300 height=300 id="cvs"></canvas>
+
+      // $( function() {
+      $(document).ready(function() {
+        $("#accordion")
+          .accordion({ 
+          	active: 1, 
+          	heightStyle: "content", 
+          	collapsible: true,
+          	//onItemTitleClick: function() {},  // TODO: reopen main if intro is closed
+          }).accordion();
+        /*  $("#formula3").fadeOut(0);
+        
+        var foo = setTimeout(fade23Toggle, 50);
+
+        function fade23Toggle() {
+            $("#formula2").fadeToggle(1000);
+            $("#formula3").fadeToggle(1000, fade23Toggle);	
+        }*/
+
+
+				/*
+				  Attempt to fix MathJax colors not showing in FF on github.io  (nofix)
+				  window.MathJax = {
+  				loader: {load: ['[tex]/color']},
+  				tex: {packages: {'[+]': ['color']}}
+				};*/
+			});
+    </script>
+
+		<div id="accordion">
+			<h3>Prerequisite</h3>
+			<div>
+				<p>
+					You should understand plain old antiderivatives and derivatives for this text, i.e.:
+					<ul>
+						<li>\(\frac{d}{dx}\left(x^{3}+x^{2}\right)=3x^{2}+2x\)</li>
+						<li>\(\int_{ }^{ }\left(x^{2}+x\right)dx=\frac{x^{3}}{3}+\frac{x^{2}}{2}\)</li>
+					</ul>
+				</p>
+			</div>
+
+			<h3>Generalizing root-extraction for higher degrees</h3>
+			<div>
+				<p>
+					You may have noticed that the quadratic-root and cubic-extrema equations differ by only two numbers:
+					<table>
+						<!--tr><td>Quadratic (4 and 2)</td><td></td><td>Cubic (3 and 3)</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr-->
+						<tr>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}4}ac} \over {\color{orange}2}a}\]</span></td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}3}ac} \over {\color{orange}3}a}\]</span></td></tr>
+					</table>
+
+					<!--table>
+						<tr><td>Quadratic (4 and 2)</td><td></td><td>Cubic (3 and 3)</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr>
+						<tr>
+							<td height=50px><span id="formula2">\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]</span><!--/td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td--><!--span id="formula3">\[x = {-b \pm \sqrt{b^2-3ac} \over 3a}\]</span></td></tr>
+					</table-->
+
+					...but you may not know that it can be extended to the quartic, quintic and beyond:
+					<br /><br />
+					<table>
+						<!--<tr><td>Quartic (\({8 \over 3}\) and 4)</td><td></td><td>Quintic (\({5 \over 2}\) and 5)</td><td>and so on...</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr-->
+						<tr>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}{8 \over 3}}ac} \over {\color{orange}4}a}\]</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}{5 \over 2}}ac} \over {\color{orange}5}a}\]</td></tr>
+					</table>
+
+					Generalizing these equations is actually easily accomplished by remembering that all the coefficients are associated with a degree'd term.<br />
+					<br />
+					Open the next section to see how to generalize the quadratic.
+				</p>
+			</div>
+				
+		  <h3>The General Quadratic</h3>
+		  <div>
+		    <p>
+		      We need to keep track of the degree associated with each coefficient.<br />
+		      <br />
+		      For example, \(a\) is associated with \(x^2\). Let's just drop \(x\) and track its exponent on the coefficient -- with \({\color{orange}\left\{n\right\}}\) to help us remember it's not part of the equation:<br />
+					<br />
+					\(a^{\color{orange}{\left\{2\right\}}}\)  \(b^{\color{orange}{\left\{1\right\}}}\)  \(c^{\color{orange}{\left\{0\right\}}}\)   then...
+
+					\[x = {-b^{\color{orange}\left\{1\right\}} \pm \sqrt{(b^{\color{orange}\left\{1\right\}})^2-4a^{\color{orange}\left\{2\right\}}c^{\color{orange}\left\{0\right\}}} \over 2a^{\color{orange}\left\{2\right\}}}\]<br />
+					<br />
+					...and then we <em>integrate the <strong>coefficients</strong> inside the quadratic equation</em>:<br />
+					<br />
+					\(\frac{-\frac{b^{\color{orange}{\left\{2\right\}}}}{2}+\sqrt{\left(\frac{b^{\color{orange}{\left\{2\right\}}}}{2}\right)^{2}-4\left(\frac{a^{\color{orange}{\left\{3\right\}}}}{3}\right)\left(\frac{c^{\color{orange}{\left\{1\right\}}}}{1}\right)}}{2\left(\frac{a^{\color{orange}{\left\{3\right\}}}}{3}\right)}\)<br />
+<br />
+ 						We're only doing one integration (quadratic to cubic) so we can drop our tracked values.
+					<br />
+					<br />
+					\(\frac{-\frac{b}{2}+\sqrt{\left(\frac{b}{2}\right)^{2}-4\left(\frac{a}{3}\right)\left(\frac{c}{1}\right)}}{2\left(\frac{a}{3}\right)}\)
+					
+          <h2>The formula</h2>
+          <p class="pindent">
+
+          </p>
+
+        </p> <!-- accordion panel -->
+		  </div> <!-- "generala quadratic" block -->
+
+		  <h3>THe General Cubic</h3>
+		  <div>
+		  	<p>
+
+		  		<h2>The formula</h2>
+		  		<p class="pindent">
+		  		</p>
+		  	</p> <!-- accordion panel -->
+		  </div> <!-- "general cubic" block
+
+		  <h3></h3>
+		  <div>
+		  	<p>
+		  		
+		  	</p>
+		  </div>
+    </div> <!-- accordion -->
+
+  </body>
+</html>

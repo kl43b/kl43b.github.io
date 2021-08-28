@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <title>Root Casting and The General Quadratic / Cubic</title>
+
+  	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script-->
+
+    <!-- jquery -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/ui-darkness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- MathJax -->
+		<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="">
+    <!-- tindent addresses a weird second-table indent bug -->
+    <style>
+      #accordion {width: 600px;}
+
+    	html {background-color: black;}
+    	.pindent {margin-left: 25px;}
+    	.tindent {margin-left: 35px;}
+    	.tdPT {color:#0000ff;}
+
+    	.breaker {
+    		float: left;
+    		clear: both;
+    		width: 100vw;
+    	}
+
+    	.fourths {
+    		float: left;
+    	  width: 25vw; 
+    	  border-style:  none;
+    	}
+    	.thirds {
+    		float: left;
+    	  width: 33vw; 
+    	  border-style:  none;
+    	}
+    	.halves {
+    		float: left;
+    	  width: 50vw; 
+    	  border-style:  none;
+    	}
+    	.nineties {
+    		float:  left;
+    		clear:  left;
+    		width: 90vw;
+    		border-style: none;
+    	}
+    	.fullsies {
+    		float: left;
+    		clear: left;
+    	  width: 100vw; 
+    	  border-style:  none;
+    	}
+
+
+
+    </style>
+  </head>
+  <body>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script-->
+
+    <script>
+      //<canvas width=300 height=300 id="cvs"></canvas>
+
+      // $( function() {
+      $(document).ready(function() {
+        $("#accordion")
+          .accordion({ 
+          	active: 1, 
+          	heightStyle: "content", 
+          	collapsible: true,
+          	//onItemTitleClick: function() {},  // TODO: reopen main if intro is closed
+          }).accordion();
+        /*  $("#formula3").fadeOut(0);
+        
+        var foo = setTimeout(fade23Toggle, 50);
+
+        function fade23Toggle() {
+            $("#formula2").fadeToggle(1000);
+            $("#formula3").fadeToggle(1000, fade23Toggle);	
+        }*/
+
+
+				/*
+				  Attempt to fix MathJax colors not showing in FF on github.io  (nofix)
+				  window.MathJax = {
+  				loader: {load: ['[tex]/color']},
+  				tex: {packages: {'[+]': ['color']}}
+				};*/
+			});
+    </script>
+
+    <font color="white">
+    In This Document
+    <ul>
+    	<li>Calculus extension: Casting any set of root points to any other set (derivative or otherwise) in one shot.</li>
+    	<li>Generalized forms of quadratic + cubic equations (extracts roots from all degrees).</li>
+    	<li>Note: While most sections have content, this is ~halfway done.
+    </ul>
+  </font>
+
+		<div id="accordion">
+			<h3>The only prerequisite</h3>
+			<div>
+				<p>
+					You should understand derivatives and antiderivatives for this text, i.e.:
+					<ul>
+						<li>\(\frac{d}{dx}\left(x^{3}+x^{2}\right)=3x^{2}+2x\)</li>
+						<li>\(\int_{ }^{ }\left(x^{2}+x\right)dx=\frac{x^{3}}{3}+\frac{x^{2}}{2}\)</li>
+					</ul>
+				</p>
+			</div>
+
+			<h3>You've Never Seen Roots Jump Like This Before</h3>
+			<div>
+				<p>
+					Usually, integration / derivatives only go up/down a single degree (so, you're swapping roots and extrema).<br />
+					<br />
+					In this document, by updating coefficients and the locator, we "cast" roots at any derivative level (e.g., all the extrema or roots) into any other derivative "root group" having enough "slots" to hold the cast -- including casts back into the same polynomial degree.<br />
+					<br />
+					All we need is Pascal's Triangle diagonals and the ability to move the locator (see previous post).<br />
+					<br />
+					In pictures, this is what I mean. The blue function is a quintic, and I am directly "casting" its two quadratic (third-derivative) roots to the extrema of a quintic, quartic and cubic.<br />
+					<br />
+
+					<img src="img/cast_5_inflex_to_5.png" width=350px>
+					<img src="img/cast_5_inflex_to_4.png" width=350px>
+					<img src="img/cast_5_inflex_to_3.png" width=350px>
+
+
+					TODO: LaTeX: The above were done with fractions: (10,4,1 / 5,4,3), (10,4,1 / 4,3,2) and (10,4,1 / 3,2,1) respectively.<br />
+					<br />
+          .... TODO: Err...quintics traditionally have 3 turning points, and 2 of whatever it's called above that. I mislabeld the images.<br />
+          <br />
+					Multiple derivatives and integrals can be combined into one step using Pascal's Triangle diagonals.<br />
+					<br />
+					Here we have a quintic equation:<br />
+						\(x^{5}+2x^{4}+-x^{3}-2x^{2}+x+1\)
+<br /><br />
+				  Its derivative and an equivalent are:<br />
+				  \(\left(5\right)x^{4\ }+\ \left(4\right)2x^{3}-\left(3\right)x^{2}-\left(2\right)2x^{1}+\left(1\right)1\)<br />
+				  \(\left(\frac{5}{1}\right)x^{4}+\left(\frac{4}{1}\right)2x^{3}-\left(\frac{3}{1}\right)x^{2}-\left(\frac{2}{1}\right)2x^{1}+\left(\frac{1}{1}\right)1\)
+<br /><br />
+				  The fractions can be constructed from Pascal's Triangle diagonals:
+				  \(\frac{5,\ 4,\ 3,\ 2,\ 1}{1,\ 1,\ 1,\ 1,\ 1}\) under the operation "extrema" to "roots". <br /><br />
+
+				  <img src="img/hexPTquintic.png"><br />
+				  <br />
+				  We can also take the second derivative in one step:
+				  ...TODO: WIP
+				  <!--\(\frac{10,\ 6,\ 3,\ 1}{1,\ 1,\ 1,\ 1}\): <br />
+				  <br />
+					\(2!\left(\left(\frac{10}{1}\right)x^{3}+\left(\frac{6}{1}\right)2x^{2}-\left(\frac{3}{1}\right)x^{1}-\left(\frac{1}{1}\right)2\right)\)
+
+					...TODO: no. Use research notes and correct the above.-->
+					<hr />
+					<strong>Footnote:</strong> While there is a snag in one cast type (i.e., when casting roots to extrema <em>within the same degree</em>, the y-line at the locator is taken as the casting level, and all "won't fit" roots get cast to the new locator (collapsing the won't-fits to a multi-root). This means that to solve a quintic, e.g., by casting roots to extrema and then deriving, you'd first have to have the locator <em>at a root</em> (so...why wouldn't you just factor then?). I think parabolic (etc) upcasts might work by making the locator "line" itself a polynomial...(I have hints here)...but ultimately my hope is that by describing this expansion to calculus, someone can help / find a way.<br />
+				</p>
+			</div>
+
+			<h3>Direct use of quadratic at higher degrees</h3>
+			<div>
+				<p>
+					You may have noticed that the quadratic-root and cubic-extrema equations differ by only two numbers:
+					<table>
+						<!--tr><td>Quadratic (4 and 2)</td><td></td><td>Cubic (3 and 3)</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr-->
+						<tr>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}4}ac} \over {\color{orange}2}a}\]</span></td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}3}ac} \over {\color{orange}3}a}\]</span></td></tr>
+					</table>
+
+					<!--table>
+						<tr><td>Quadratic (4 and 2)</td><td></td><td>Cubic (3 and 3)</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr>
+						<tr>
+							<td height=50px><span id="formula2">\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]</span>/td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td--><!--span id="formula3">\[x = {-b \pm \sqrt{b^2-3ac} \over 3a}\]</span></td></tr>
+					</table-->
+
+					...but you may not know that it can be extended to the quartic, quintic and beyond:
+					<br /><br />
+					<table>
+						<!--<tr><td>Quartic (\({8 \over 3}\) and 4)</td><td></td><td>Quintic (\({5 \over 2}\) and 5)</td><td>and so on...</td></tr>
+						<tr><td><hr /></td><td></td><td><hr /></td></tr-->
+						<tr>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}{8 \over 3}}ac} \over {\color{orange}4}a}\]</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>\[x = {-b \pm \sqrt{b^2-{\color{orange}{5 \over 2}}ac} \over {\color{orange}5}a}\]</td></tr>
+					</table>
+
+					In the next section, I'll show how to generalize the quadratic by applying Pascal's Triangle diagonals to its insides.<br />
+				</p>
+			</div>
+				
+		  <h3>The General Quadratic</h3>
+		  <div>
+		    <p>					
+					<br />
+					<a href="desmos/general_quadratic.html">Demo Link: General Quadratic (desmos)</a><br />
+					<br />
+							  		<h2>The formula</h2>
+	\(d_{eg}=2\) <em>&nbsp;&nbsp;&nbsp;(...3 extracts cubic extrema; 4 quartic inflex, 5...)</em><br /><br />
+ \(\frac{-b\pm\sqrt{b^{2}-\frac{2d_{eg}}{d_{eg}-1}ac}}{d_{eg}a}\) works at any degree other than 1.
+					<hr />
+					WIP: Description / how to use it at any degree 
+					<br />
+
+ 						<!-- TODO: This is from a different part of research. Pull in the correct pages -->
+		      <!--We need to keep track of the degree associated with each coefficient.<br />
+		      <br />
+		      For example, \(a\) is associated with \(x^2\). Let's just drop \(x\) and track its exponent on the coefficient -- with \({\color{orange}\left\{n\right\}}\) to help us remember it's not part of the equation:<br />
+					<br />
+					\(a^{\color{orange}{\left\{2\right\}}}\)  \(b^{\color{orange}{\left\{1\right\}}}\)  \(c^{\color{orange}{\left\{0\right\}}}\)   then...
+
+					\[x = {-b^{\color{orange}\left\{1\right\}} \pm \sqrt{(b^{\color{orange}\left\{1\right\}})^2-4a^{\color{orange}\left\{2\right\}}c^{\color{orange}\left\{0\right\}}} \over 2a^{\color{orange}\left\{2\right\}}}\]<br />
+					<br />
+					...and then we <em>integrate the <strong>coefficients</strong> inside the quadratic equation</em>:<br />
+					<br />
+					\(\frac{-\frac{b^{\color{orange}{\left\{2\right\}}}}{2}+\sqrt{\left(\frac{b^{\color{orange}{\left\{2\right\}}}}{2}\right)^{2}-4\left(\frac{a^{\color{orange}{\left\{3\right\}}}}{3}\right)\left(\frac{c^{\color{orange}{\left\{1\right\}}}}{1}\right)}}{2\left(\frac{a^{\color{orange}{\left\{3\right\}}}}{3}\right)}\)<br />
+<br />
+ 						We're only doing one integration (quadratic to cubic) so we can drop our tracked values.
+					<br />
+					<br />
+					\(\frac{-\frac{b}{2}+\sqrt{\left(\frac{b}{2}\right)^{2}-4\left(\frac{a}{3}\right)\left(\frac{c}{1}\right)}}{2\left(\frac{a}{3}\right)}\)
+					
+          <h2>The formula</h2>
+          <p class="pindent">
+
+          </p>-->
+
+        </p> <!-- accordion panel -->
+		  </div> <!-- "generala quadratic" block -->
+
+		  <h3>THe General Cubic</h3>
+		  <div>
+		  	<p>
+		  							<br />
+					<a href="desmos/general_cubic.html">Demo Link: General Cubic (desmos)</a><br />
+					<br />
+
+		  		<h2>The formula</h2>
+	\(d_{eg}=3\) <em>&nbsp;&nbsp;&nbsp;(...4 extracts quartic extrema; 5 quintic inflex...)</em><br /><br />
+	\(i_{nbit}=\left(\frac{-1}{d_{eg}^{3}}\right)\frac{b^{3}}{a^{3}}+\left(\frac{3}{d_{eg}^{2}\left(<br /><br />d_{eg}-1\right)}\right)\frac{bc}{a^{2}}+\left(\frac{-3}{d_{eg}\left(d_{eg}-1\right)\left(d_{eg}-2\right)}\right)\frac{d}{a}\)<br /><br />
+	\(d_{iscrim}=i_{nbit}^{2}+\left(\left(\frac{-1}{d_{eg}^{2}}\right)\frac{b^{2}}{a^{2}}+\left(\frac{2}{d_{eg}\left(d_{eg}-1\right)}\right)\frac{c}{a}\right)^{3}\)<br /><br />
+	\(c_{ubic}=\sum_{n=0}^{1}\sqrt[3]{i_{nbit}+\left(-1\right)^{n}\sqrt{d_{iscrim}}}-\frac{b}{d_{eg}a}\)<br /><br />
+
+		  		* Notice how Pascal's (Inverted) Triangle diagonals [-1, 3, -3, omit] and [-1, 2, omit] and [possibly the 1 on \(-\frac{b}{d_{eg}a}\)] appear in the numerators of the generalized cubic equation. Similar truncated diagonals <em>seem</em> to also appear in the general quadratic.<br />
+		  		* TODO: Show surpise derivation of cubic equation after locator move.<br />
+		  		* Ask readers if the patterns seen here / quadratic could simplify the quartic equation. 
+		  		<p class="pindent">
+		  		</p>
+		  	</p> <!-- accordion panel -->
+		  </div> <!-- "general cubic" block -->
+
+		  <h3>Can We Simplify The Quadric</h3>
+		  <div>
+		  	<p>
+		  		<h2>The formula</h2>
+		  		<p class="pindent">
+		  			TODO: ... can we simplify and generalize the quadric equation based on what we see above?
+		  		</p>
+		  	</p> <!-- accordion panel -->
+		  </div> <!-- "general quadric" block -->
+
+		  <!--h3></h3>
+		  <div>
+		  	<p>
+		  		
+		  	</p>
+		  </div-->
+    </div> <!-- accordion -->
+
+  </body>
+  <!--- quadratic to cubic AND quadratic straight to quartic
+
+  	{"version":7,"graph":{"viewport":{"xmin":-10,"ymin":-10.718475073313783,"xmax":10,"ymax":10.718475073313783}},"randomSeed":"a370a88b6c5119a5a85f6fe0f09df02e","expressions":{"list":[{"type":"expression","id":"2","color":"#2d70b3","latex":"\\frac{-\\frac{2}{3}b+\\sqrt{\\left(\\frac{2}{3}b\\right)^{2}-4\\left(\\frac{3}{3}a\\right)\\left(\\frac{1}{3}c\\right)}}{2\\left(\\frac{3}{3}a\\right)}"},{"type":"expression","id":"3","color":"#388c46","latex":"\\left(\\frac{\\frac{3}{2}}{\\frac{3}{2}}\\right)\\frac{-\\frac{2}{3}b+\\sqrt{\\frac{4}{9}b^{2}-\\frac{12}{9}ac}}{\\frac{6}{3}a}"},{"type":"expression","id":"8","color":"#388c46","latex":"\\frac{-b\\ +\\sqrt{\\left(\\frac{9}{4}\\right)\\left(\\frac{4}{9}\\right)b^{2}-\\left(\\frac{9}{4}\\right)\\left(\\frac{12}{9}\\right)ac}}{3a}"},{"type":"expression","id":"9","color":"#6042a6","latex":"\\frac{-b\\ +\\sqrt{b^{2}-3ac}}{3a}"},{"type":"text","id":"11","text":"separator ... it works going straight from quadratic to quartic."},{"type":"text","id":"14","text":"6,3,1  / 4,4,4"},{"type":"expression","id":"15","color":"#388c46","latex":"\\frac{-\\frac{3}{4}b+\\sqrt{\\left(\\frac{3}{4}b\\right)^{2}-4\\left(\\frac{6}{4}a\\right)\\left(\\frac{1}{4}\\right)c}}{2\\left(\\frac{6}{4}a\\right)}"},{"type":"expression","id":"16","color":"#6042a6","latex":"\\left(\\frac{\\frac{4}{3}}{\\frac{4}{3}}\\right)\\frac{\\left(-\\frac{3}{4}b+\\sqrt{\\frac{9}{16}b^{2}-\\frac{3}{2}ac}\\right)}{3a}"},{"type":"expression","id":"17","color":"#000000","latex":"\\frac{-b+\\sqrt{\\left(\\frac{16}{9}\\right)\\left(\\frac{9}{16}\\right)b^{2}-\\left(\\frac{16}{9}\\right)\\left(\\frac{3}{2}\\right)ac}}{4a}"},{"type":"expression","id":"12","color":"#c74440","latex":"\\frac{-b+\\sqrt{b^{2}-\\frac{8}{3}ac}}{4a}"}]}}
+  -->
+</html>
