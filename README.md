@@ -11,6 +11,6 @@ This project contains my 2021 submission for 3b1b's [Summer Of Math Exposition](
 
 [Calculus Extension to differentiation + new generalized quadratic/cubic equations](GeneralQuadCubic.html) : Using PT and locator, we can "cast" groups of roots to any other root group, generally regardless of the polynomial degree. **Also included:** Generalized Quadratic and Cubic Equations (for any degree). 
 
-Desmos demos: [general quadratic](/desmos/general_quadratic.html) / [general cubic](/desmos/general_cubic.html)
+Desmos demos: [generalized quadratic](/desmos/general_quadratic.html) / [generalized cubic](/desmos/general_cubic.html)
 
-3. Expanded locator insights next... 
+3. Expanded locator insights next, e.g., The Locator Line 
